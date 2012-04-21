@@ -7,7 +7,16 @@ static VALUE array_sum(VALUE self) {
   int i;
 
   for (i = 0; i < size; i++) {
-    total += NUM2DBL(array[i]);
+    VALUE item = array[i];
+
+    switch (TYPE(item)) {
+      case T_FIXNUM:
+        total += FIX2INT(item);
+        break;
+      case T_FLOAT:
+        total += NUM2DBL(item);
+        break;
+    }
   }
 
   return rb_float_new(total);
