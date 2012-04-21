@@ -13,7 +13,7 @@ static VALUE array_sum(VALUE self) {
       case T_FIXNUM:
         total += FIX2INT(item);
         break;
-      case T_FLOAT:
+      default:
         total += NUM2DBL(item);
         break;
     }
