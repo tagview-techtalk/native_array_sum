@@ -1,10 +1,12 @@
 #include <ruby.h>
+#include <stdbool.h>
 
 static VALUE array_sum(VALUE self) {
   long size = RARRAY_LEN(self);
   VALUE *array = RARRAY_PTR(self);
   double total = 0;
   int i;
+  bool has_float = false;
 
   for (i = 0; i < size; i++) {
     VALUE item = array[i];
@@ -14,12 +16,20 @@ static VALUE array_sum(VALUE self) {
         total += FIX2INT(item);
         break;
       default:
+        if (!has_float) {
+          has_float = true;
+        }
+
         total += NUM2DBL(item);
         break;
     }
   }
 
-  return rb_float_new(total);
+  if (has_float) {
+    return rb_float_new(total);
+  } else {
+    return INT2NUM(total);
+  }
 }
 
 void Init_native_array_sum() {
